@@ -620,7 +620,23 @@ function render(){
 function notFound(){return `<main class="container center" style="min-height:55vh;padding-top:100px"><h1 style="font-size:90px">404</h1><h2 style="font-family:Barlow;font-size:20px">Page not found</h2><p class="muted">The page you're looking for doesn't exist or has been moved.</p><a class="btn btn-primary" style="margin-top:24px" href="/">GO HOME</a></main>`}
 function bind(){
  $("#menuBtn")?.addEventListener("click",()=>{menuOpen=!menuOpen;render()});
- document.querySelectorAll("a[href^='/']").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();history.pushState({},'',a.getAttribute("href"));menuOpen=false;render()}));
+ document.querySelectorAll("a[href^='/']").forEach(a=>{
+    if (a.dataset.navigationBound === "true") return;
+
+    a.dataset.navigationBound = "true";
+
+    a.addEventListener("click",e=>{
+        e.preventDefault();
+
+        const target = a.getAttribute("href");
+
+        if (!target) return;
+
+        history.pushState({},'',target);
+        menuOpen=false;
+        render();
+    });
+});
  $("#addBtn")?.addEventListener("click",()=>{const p=getProduct(location.pathname.split("/")[2]);const s=document.querySelector(".size.selected")?.dataset.size||p.sizes[0];addCart(p.slug,s);const b=$("#addBtn");b.textContent="✓  ADDED TO CART";setTimeout(()=>b.textContent="ADD TO CART",1800)});
  document.querySelectorAll(".size").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".size").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}));
  document.querySelectorAll("[data-minus]").forEach(b=>b.onclick=()=>{const [s,z]=b.dataset.minus.split("|");const x=cart.find(i=>i.slug===s&&i.size===z);setQty(s,z,(x?.qty||1)-1);render()});
@@ -932,12 +948,24 @@ function adminPage() {
 
                         <div class="field">
                             <label class="eyebrow muted">EMAIL</label>
-                            <input id="adminEmail" type="email" required>
+                            <input
+                                id="adminEmail"
+                                type="email"
+                                value="admin@aurvm.com"
+                                autocomplete="username"
+                                required
+                            >
                         </div>
 
                         <div class="field">
                             <label class="eyebrow muted">PASSWORD</label>
-                            <input id="adminPassword" type="password" required>
+                            <input
+                                id="adminPassword"
+                                type="password"
+                                autocomplete="current-password"
+                                placeholder="admin123"
+                                required
+                            >
                         </div>
 
                         <button class="btn btn-primary" style="width:100%">
@@ -1236,10 +1264,10 @@ function bindAdmin() {
                 document.querySelector("#adminEmail").value.trim();
 
             const password =
-                document.querySelector("#adminPassword").value;
+                document.querySelector("#adminPassword").value.trim();
 
             if (
-                email !== "admin@aurvm.com" ||
+                email.toLowerCase() !== "admin@aurvm.com" ||
                 password !== "admin123"
             ) {
                 showToast("Invalid admin credentials");
@@ -1445,6 +1473,7 @@ header = function () {
                             ? `
                                 <a
                                     class="icon-btn"
+                                    id="accountButton"
                                     href="/account"
                                     aria-label="Account"
                                 >
@@ -1454,6 +1483,7 @@ header = function () {
                             : `
                                 <a
                                     class="icon-btn"
+                                    id="accountButton"
                                     href="/login"
                                     aria-label="Login"
                                 >
@@ -1545,6 +1575,18 @@ function accountPage() {
         </main>
     `;
 }
+
+
+/*
+    NETLIFY ROUTING NOTE
+    ---------------------
+    The JavaScript handles /admin, /login, /signup, etc.
+    inside the browser.
+
+    A direct visit to /admin also needs Netlify's SPA fallback.
+    That fallback is provided by the _redirects file included
+    beside this index.html.
+*/
 
 /* ---------- Final feature-aware route rendering ---------- */
 
