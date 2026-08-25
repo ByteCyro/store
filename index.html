@@ -229,7 +229,7 @@ function cartPage(){
 function render(){
  const path=location.pathname.replace(/\/$/,"")||"/";
  let content;
- if(path==="/")content=home();
+ if(path==="/"||path==="/store"||path=="/home")content=home();
  else if(path==="/shop")content=shop();
  else if(path.startsWith("/shop/"))content=shop(path.split("/")[2]);
  else if(path.startsWith("/product/")){const p=getProduct(path.split("/")[2]);content=p?productPage(p):notFound()}
