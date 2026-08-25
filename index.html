@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <!-- =====================================================
+         BASIC PAGE INFORMATION
+         ===================================================== -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="AURVM — Bold silver jewellery."
+    >
+
+    <title>AURVM — Bold Silver Jewellery</title>
+
+
+    <!-- =====================================================
+         FONTS
+         These are loaded from Google Fonts.
+         ===================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         ALL CSS
+         ===================================================== -->
+
+    <style>
+
+/* =========================================================
+   AURVM — STYLES
+   Everything between this section and the JavaScript section
+   controls the visual appearance of the website.
+   ========================================================= */
+
+*{box-sizing:border-box}
+:root{
+  --bg:#171717;--fg:#f7f7f7;--card:#202020;--muted:#a5a5a5;--border:rgba(255,255,255,.12);
+  --accent:#e04a2f;--primary:#f7f7f7;--primary-fg:#171717;--secondary:#202020;
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Barlow,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}img{display:block;max-width:100%}
+h1,h2,h3{font-family:"Bebas Neue",sans-serif;letter-spacing:.02em;font-weight:400;margin:0}
+.eyebrow{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase}
+.muted{color:var(--muted)}.border{border-color:var(--border)}
+.container{padding:56px 32px}.center{text-align:center}
+.site-header{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--border)}
+.sale-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:8px 32px;border-bottom:1px solid var(--border)}
+.countdown{display:flex;gap:12px}.countdown>div{text-align:center}.countdown .num{font-family:"Bebas Neue";font-size:20px;line-height:1}.countdown small{font-size:.55rem;letter-spacing:.2em;color:var(--muted)}
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:20px 32px}.logo{font-family:"Bebas Neue";font-size:24px;letter-spacing:.3em}
+.nav{display:flex;align-items:center;gap:32px}.nav a,.icon-btn{font-size:12px;letter-spacing:.18em;font-weight:500}
+.actions{display:flex;align-items:center;gap:20px}.icon-btn{background:none;border:0;padding:0;position:relative}
+.icon{width:20px;height:20px;display:inline-block}.cart-badge{position:absolute;right:-9px;top:-9px;min-width:16px;height:16px;padding:0 4px;border-radius:50%;background:var(--accent);font-size:10px;display:flex;align-items:center;justify-content:center}
+.menu-btn{display:none}
+.mobile-nav{display:none;border-top:1px solid var(--border);padding:24px 16px;flex-direction:column;gap:16px}.mobile-nav.open{display:flex}
+
+.hero{position:relative}.hero img{width:100%;height:68vh;object-fit:cover}.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(23,23,23,.7),transparent)}
+.hero-copy{position:absolute;left:32px;bottom:56px;max-width:620px}.hero h1{font-size:clamp(60px,8vw,112px);line-height:.9;margin-top:8px}
+.btn{display:inline-block;border:1px solid var(--border);padding:13px 32px;font-size:12px;font-weight:600;letter-spacing:.2em;transition:.2s;background:none}
+.btn:hover{border-color:var(--fg)}.btn-primary{background:var(--primary);color:var(--primary-fg);border-color:var(--primary)}.btn-primary:hover{opacity:.8}
+.hero .btn{margin-top:24px}
+
+.marquee{overflow:hidden;border-block:1px solid var(--border);background:var(--secondary);padding:12px 0}.marquee-track{display:inline-flex;white-space:nowrap;animation:marquee 28s linear infinite}.marquee-item{padding:0 32px;color:var(--muted)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.section{padding:64px 32px}.section-head{text-align:center}.section-head h2{font-size:clamp(48px,6vw,72px);margin-top:8px}
+.grid-products{margin-top:40px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px 16px}
+.product-card .media{position:relative;overflow:hidden;background:var(--secondary);aspect-ratio:9/11}
+.product-card img{width:100%;height:100%;object-fit:cover;transition:transform .7s}
+.product-card:hover img{transform:scale(1.05)}
+.save{position:absolute;left:0;top:0;z-index:2;background:var(--accent);padding:5px 8px;font-size:10px;font-weight:600;letter-spacing:.14em}
+.view-product{position:absolute;left:0;right:0;bottom:0;transform:translateY(100%);background:var(--primary);color:var(--primary-fg);text-align:center;padding:12px;font-size:12px;font-weight:600;letter-spacing:.2em;transition:transform .3s}
+.product-card:hover .view-product{transform:translateY(0)}
+.product-card h3{font-family:Barlow;font-size:18px;letter-spacing:.04em;margin-top:12px}.price{font-size:14px;margin-top:4px}.old{text-decoration:line-through;color:var(--muted)}
+.view-all{text-align:center;margin-top:40px}
+
+.category-grid{margin-top:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--border);background:var(--border)}
+.category-tile{background:var(--bg);padding:48px 24px;text-align:center;transition:.2s}.category-tile:hover{background:var(--secondary)}.category-tile h3{font-size:32px}.category-tile p{font-size:12px;color:var(--muted);margin:8px 0 0}.category-tile .eyebrow{margin-top:16px}
+
+.editorial{position:relative}.editorial img{width:100%;height:60vh;object-fit:cover}.editorial-overlay{position:absolute;inset:0;background:rgba(23,23,23,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.editorial-overlay h2{font-size:clamp(48px,7vw,84px)}.editorial-overlay p{max-width:440px;padding:0 24px;font-size:14px;color:var(--muted);line-height:1.6}
+.value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-block:1px solid var(--border)}.value{background:var(--bg);padding:40px 24px;text-align:center}.value h3{font-size:28px}.value p{font-size:14px;color:var(--muted)}
+
+footer{border-top:1px solid var(--border);padding:56px 32px}.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px}.footer-logo{font-family:"Bebas Neue";font-size:24px;letter-spacing:.3em}.footer-grid h3{font-family:"Bebas Neue";font-size:18px}.footer-grid ul{list-style:none;padding:0;margin:12px 0 0;line-height:1.8;color:var(--muted);font-size:14px}.footer-grid a:hover{color:var(--fg)}.copyright{text-align:center;color:var(--muted);font-size:12px;margin-top:48px}
+
+.page-title{font-size:clamp(56px,7vw,90px);line-height:.95}.tabs{display:flex;flex-wrap:wrap;gap:24px;margin-top:32px}.tabs a{font-size:12px;letter-spacing:.2em;color:var(--muted);padding-bottom:4px}.tabs a.active,.tabs a:hover{color:var(--fg)}.tabs a.active{border-bottom:1px solid var(--fg)}
+
+.product-detail{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:24px}.detail-image{position:relative;background:var(--secondary)}.detail-image img{width:100%;aspect-ratio:9/11;object-fit:cover}.detail-info{padding-top:24px}.detail-info h1{font-size:clamp(52px,6vw,82px);line-height:.95}.detail-price{font-size:20px;margin-top:12px}.description{max-width:520px;font-size:14px;line-height:1.7;color:var(--muted);margin-top:20px}.size-label{margin-top:32px}.sizes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.size{background:none;border:1px solid var(--border);padding:9px 16px;font-size:12px;letter-spacing:.15em}.size.selected{background:var(--primary);color:var(--primary-fg);border-color:var(--fg)}.detail-actions{margin-top:32px;display:flex;flex-direction:column;width:320px;gap:12px}.details{margin-top:40px;border-top:1px solid var(--border);font-size:14px}.details div{padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}.related{margin-top:80px}.related h2{font-size:42px}
+
+.cart-layout{margin-top:40px;display:grid;grid-template-columns:1fr 320px;gap:48px}.cart-list{border-block:1px solid var(--border)}.cart-row{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--border)}.cart-row:last-child{border-bottom:0}.cart-row img{width:96px;height:112px;object-fit:cover}.cart-main{flex:1}.cart-name{font-size:18px}.cart-meta{font-size:12px;color:var(--muted)}.qty{display:flex;border:1px solid var(--border);width:max-content;margin-top:12px}.qty button,.qty span{border:0;background:none;padding:5px 12px}.summary{height:max-content;border:1px solid var(--border);padding:24px}.summary h2{font-size:28px}.summary-line{display:flex;justify-content:space-between;margin-top:12px;font-size:14px}.summary-total{border-top:1px solid var(--border);padding-top:16px;margin-top:16px}.empty{text-align:center;padding:80px 0}.order-success{text-align:center;padding:96px 16px}.order-success h1{font-size:64px}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px}.field{margin-bottom:20px}.field label{display:block}.field input,.field textarea{width:100%;margin-top:8px;background:transparent;border:1px solid var(--border);padding:12px 16px;outline:0}.field input:focus,.field textarea:focus{border-color:var(--fg)}.faq{border-block:1px solid var(--border);margin-top:24px}.faq-item{padding:20px 0;border-bottom:1px solid var(--border)}.faq-item:last-child{border:0}.faq-item dt{font-weight:600;font-size:14px}.faq-item dd{margin:4px 0 0;color:var(--muted);font-size:14px}
+
+.about-intro{max-width:900px}.about-intro h1{font-size:clamp(56px,7vw,96px);line-height:.95}.about-intro p{max-width:640px;line-height:1.7;color:var(--muted);font-size:14px;margin-top:24px}.about-values{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-block:1px solid var(--border)}.about-values>div{background:var(--bg);padding:48px 24px}.about-values h2{font-size:28px}.about-values p{color:var(--muted);font-size:14px;line-height:1.5}
+
+@media(max-width:900px){
+ .nav{display:none}.menu-btn{display:inline-flex}.sale-bar{padding:8px 16px}.navbar{padding:18px 16px}
+ .hero img{height:68vh}.hero-copy{left:16px;bottom:40px}.container,.section{padding:48px 16px}
+ .grid-products{grid-template-columns:repeat(2,1fr);gap:36px 12px}.category-grid{grid-template-columns:repeat(2,1fr)}
+ .footer-grid{grid-template-columns:repeat(2,1fr)}footer{padding:48px 16px}
+ .product-detail{grid-template-columns:1fr}.detail-actions{width:100%;max-width:320px}.cart-layout{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}
+ .value-grid,.about-values{grid-template-columns:1fr}.editorial img{height:55vh}
+}
+@media(max-width:520px){
+ .sale-bar .eyebrow{font-size:9px}.countdown{gap:7px}.countdown .num{font-size:17px}
+ .grid-products{gap:32px 10px}.product-card h3{font-size:15px}.price{font-size:13px}
+ .footer-grid{grid-template-columns:1fr 1fr}.hero h1{font-size:58px}.hero img{height:70vh}
+ .category-tile{padding:34px 12px}.category-tile h3{font-size:25px}
+}
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         WEBSITE ROOT
+
+         JavaScript creates the website inside this element.
+         ===================================================== -->
+
+    <div id="app"></div>
+
+
+    <!-- =====================================================
+         ALL JAVASCRIPT
+         ===================================================== -->
+
+    <script>
+
+/* =========================================================
+   AURVM — JAVASCRIPT
+   This section controls:
+   - Products and categories
+   - Navigation
+   - Shopping cart
+   - Product pages
+   - Contact form
+   - Countdown
+   ========================================================= */
+
+const PRODUCTS=[
+{slug:"vantage-cuban-chain",name:"Vantage Cuban Chain",img:"assets/p1.jpg",price:4299,mrp:6499,category:"chains",material:"925 Sterling Silver",description:"A 7mm diamond-cut cuban link with a hand-polished mirror finish and a reinforced box clasp. Built to sit heavy and hold shape.",details:["7mm width","Reinforced box clasp","Anti-tarnish rhodium finish","Weighs 62g"],sizes:['18"','20"','22"']},
+{slug:"crest-signet-ring",name:"Crest Signet Ring",img:"assets/p2.jpg",price:2899,mrp:3999,category:"rings",material:"925 Sterling Silver",description:"A domed signet with a hand-engraved crest set in oxidised black. Rounded inner band for all-day wear.",details:["18mm face","Oxidised crest detail","Comfort-fit band","Weighs 14g"],sizes:["16","18","20","22"]},
+{slug:"spike-hoop-earrings",name:"Spike Hoop Earrings",img:"assets/p3.jpg",price:1899,mrp:2799,category:"earrings",material:"925 Sterling Silver",description:"Fine 35mm hoops loaded with solid cone spikes. Light on the ear, loud on the eye.",details:["35mm diameter","Solid cast spikes","Hypoallergenic posts","Sold as a pair"],sizes:["One size"]},
+{slug:"forge-hammered-cuff",name:"Forge Hammered Cuff",img:"assets/p4.jpg",price:3499,mrp:4999,category:"bracelets",material:"925 Sterling Silver",description:"A wide open cuff finished with a hand-hammered texture that catches light from every angle.",details:["20mm width","Hand-hammered surface","Adjustable open back","Weighs 41g"],sizes:["S/M","L/XL"]},
+{slug:"vigil-cross-pendant",name:"Vigil Cross Pendant",img:"assets/p5.jpg",price:2299,mrp:3499,category:"chains",material:"925 Sterling Silver",description:"A sandblasted cross pendant with polished edges, hung on a fine cable chain. Quiet, but never plain.",details:["32mm pendant","Sandblasted centre",'Includes 20in cable chain',"Weighs 11g"],sizes:['18"','20"']},
+{slug:"onyx-stack-ring-set",name:"Onyx Stack Ring Set",img:"assets/p6.jpg",price:2699,mrp:3899,category:"rings",material:"925 Silver & Black Onyx",description:"Three slim bands, one set with a cabochon black onyx. Wear stacked or split them across fingers.",details:["Set of 3 bands","Natural black onyx","2mm band width","Weighs 9g total"],sizes:["16","18","20"]}
+];
+const CATEGORIES=[
+{slug:"chains",label:"Chains",blurb:"Heavyweight links and pendants in solid 925 silver."},
+{slug:"rings",label:"Rings",blurb:"Signets, stacks and stones cast to be worn daily."},
+{slug:"earrings",label:"Earrings",blurb:"Hoops, studs and spikes with real presence."},
+{slug:"bracelets",label:"Bracelets",blurb:"Cuffs and chain bracelets with serious weight."}
+];
+const TICKER=["SHIPS UNDER 48 HOURS","LIMITED QUANTITIES","NO RESTOCKS","925 STERLING SILVER"];
+const $=s=>document.querySelector(s);
+const money=n=>"Rs. "+n.toLocaleString("en-IN");
+const save=p=>Math.round(100-p.price/p.mrp*100);
+const getProduct=slug=>PRODUCTS.find(p=>p.slug===slug);
+let cart=JSON.parse(localStorage.getItem("aurvm-cart")||"[]");
+let menuOpen=false;
+
+function cartCount(){return cart.reduce((n,x)=>n+x.qty,0)}
+function persist(){localStorage.setItem("aurvm-cart",JSON.stringify(cart));updateBadge()}
+function updateBadge(){document.querySelectorAll(".cart-badge").forEach(e=>{const n=cartCount();e.textContent=n;e.style.display=n?"flex":"none"})}
+function addCart(slug,size,qty=1){let x=cart.find(i=>i.slug===slug&&i.size===size);if(x)x.qty+=qty;else cart.push({slug,size,qty});persist()}
+function removeCart(slug,size){cart=cart.filter(i=>!(i.slug===slug&&i.size===size));persist()}
+function setQty(slug,size,qty){cart=cart.map(i=>i.slug===slug&&i.size===size?{...i,qty}:i).filter(i=>i.qty>0);persist()}
+function icon(type){
+ const paths={search:'<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>',user:'<circle cx="12" cy="7" r="4"></circle><path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path>',bag:'<path d="M5 8h14l-1 13H6L5 8Z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path>',menu:'<path d="M4 6h16M4 12h16M4 18h16"></path>',x:'<path d="M5 5l14 14M19 5 5 19"></path>'};
+ return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">${paths[type]}</svg>`;
+}
+function header(){
+ return `<header class="site-header"><div class="sale-bar"><p class="eyebrow">FESTIVE SILVER SALE \\ UPTO 40% OFF</p><div class="countdown" id="countdown"></div></div>
+ <div class="navbar"><a class="logo" href="/">AURVM</a><nav class="nav">${navLinks()}</nav>
+ <div class="actions"><a class="icon-btn" href="/shop" aria-label="Search">${icon("search")}</a><a class="icon-btn" href="/contact" aria-label="Account">${icon("user")}</a><a class="icon-btn" href="/cart" aria-label="Cart">${icon("bag")}<span class="cart-badge">${cartCount()}</span></a><button class="icon-btn menu-btn" id="menuBtn">${icon(menuOpen?"x":"menu")}</button></div></div>
+ <nav class="mobile-nav ${menuOpen?"open":""}">${navLinks()}</nav></header>`;
+}
+function navLinks(){return `<a href="/shop">NEW DROPS</a>${CATEGORIES.map(c=>`<a href="/shop/${c.slug}">${c.label.toUpperCase()}</a>`).join("")}<a href="/about">ABOUT</a><a href="/contact">CONTACT</a>`}
+function footer(){return `<footer><div class="footer-grid"><div><p class="footer-logo">AURVM</p><p class="muted" style="max-width:280px;font-size:14px;margin-top:12px">Heavyweight silver jewellery for people who don't do subtle.</p></div><div><h3>SHOP</h3><ul>${CATEGORIES.map(c=>`<li><a href="/shop/${c.slug}">${c.label}</a></li>`).join("")}</ul></div><div><h3>HELP</h3><ul><li><a href="/contact">Shipping & Returns</a></li><li><a href="/contact">Size Guide</a></li><li><a href="/contact">Care Guide</a></li><li><a href="/cart">Your Cart</a></li></ul></div><div><h3>BRAND</h3><ul><li><a href="/about">Our Story</a></li><li><a href="/shop">All Products</a></li><li><a href="/contact">Contact</a></li></ul></div></div><p class="copyright">© ${new Date().getFullYear()} AURVM. All rights reserved.</p></footer>`}
+function card(p){return `<article class="product-card"><a href="/product/${p.slug}" class="media"><span class="save">SAVE ${save(p)}%</span><img src="${p.img}" alt="${p.name}" loading="lazy"><span class="view-product">VIEW PRODUCT</span></a><h3><a href="/product/${p.slug}">${p.name}</a></h3><p class="price">${money(p.price)} <span class="old">${money(p.mrp)}</span></p></article>`}
+function cards(list){return `<div class="grid-products">${list.map(card).join("")}</div>`}
+function categories(){return `<div class="category-grid">${CATEGORIES.map(c=>`<a class="category-tile" href="/shop/${c.slug}"><h3>${c.label.toUpperCase()}</h3><p>${c.blurb}</p><p class="eyebrow muted">SHOP NOW →</p></a>`).join("")}</div>`}
+function home(){
+ return `<main><section class="hero"><img src="assets/hero.jpg" alt="Models wearing layered silver chains and rings"><div class="hero-overlay"></div><div class="hero-copy"><p class="eyebrow muted">DROP 04 — SILVER RITUAL</p><h1>WEIGHT YOU<br>CAN FEEL</h1><a class="btn btn-primary" href="/shop">SHOP THE DROP</a></div></section>
+ <div class="marquee"><div class="marquee-track">${[0,1].map(()=>`<div>${[...TICKER,...TICKER,...TICKER].map(t=>`<span class="eyebrow marquee-item">${t}</span>`).join("")}</div>`).join("")}</div></div>
+ <section class="section"><div class="section-head"><p class="eyebrow muted">NEW ARRIVALS</p><h2>JUST DROPPED</h2></div>${cards(PRODUCTS.slice(0,4))}<div class="view-all"><a class="btn" href="/shop">VIEW ALL PRODUCTS</a></div></section>
+ <section class="section" style="border-top:1px solid var(--border)"><div class="section-head"><p class="eyebrow muted">COLLECTIONS</p><h2>SHOP BY CATEGORY</h2></div>${categories()}</section>
+ <section class="editorial"><img src="assets/editorial.jpg" alt="Close-up of layered silver chains"><div class="editorial-overlay"><h2>MADE IN 925</h2><p>Solid sterling silver, anti-tarnish finished and hand-polished in small batches. Once a drop sells out, it never comes back.</p><a class="btn" href="/about">OUR STORY</a></div></section>
+ <section class="value-grid"><div class="value"><h3>48 HOUR DISPATCH</h3><p>Every order leaves our studio within two days.</p></div><div class="value"><h3>LIFETIME POLISH</h3><p>Free re-polishing on all AURVM pieces, forever.</p></div><div class="value"><h3>EASY RETURNS</h3><p>7-day no-questions returns across India.</p></div></section></main>`;
+}
+function shop(category){
+ const active=category?CATEGORIES.find(c=>c.slug===category):null;
+ const list=active?PRODUCTS.filter(p=>p.category===category):PRODUCTS;
+ return `<main class="container"><p class="eyebrow muted">${active?"COLLECTION":"ALL PRODUCTS"}</p><h1 class="page-title">${active?active.label.toUpperCase():"THE FULL RANGE"}</h1>${active?`<p class="muted" style="max-width:520px;margin-top:12px;font-size:14px">${active.blurb}</p>`:""}<div class="tabs"><a href="/shop" class="${!active?"active":""}">ALL</a>${CATEGORIES.map(c=>`<a href="/shop/${c.slug}" class="${active&&active.slug===c.slug?"active":""}">${c.label.toUpperCase()}</a>`).join("")}</div>${cards(list)}</main>`;
+}
+function productPage(p){
+ let size=p.sizes[0];
+ return `<main class="container"><nav class="eyebrow muted"><a href="/shop">SHOP</a> / <a href="/shop/${p.category}">${p.category.toUpperCase()}</a></nav><div class="product-detail"><div class="detail-image"><span class="save">SAVE ${save(p)}%</span><img src="${p.img}" alt="${p.name}"></div><div class="detail-info"><h1>${p.name.toUpperCase()}</h1><p class="detail-price">${money(p.price)} <span class="old">${money(p.mrp)}</span></p><p class="description">${p.description}</p><p class="eyebrow muted size-label">SIZE</p><div class="sizes">${p.sizes.map((s,i)=>`<button class="size ${i===0?"selected":""}" data-size="${s}">${s}</button>`).join("")}</div><div class="detail-actions"><button class="btn btn-primary" id="addBtn">ADD TO CART</button><a class="btn" href="/cart">VIEW CART</a></div><div class="details"><div><span class="muted">Material</span><span>${p.material}</span></div>${p.details.map(d=>`<div><span class="muted">${d}</span></div>`).join("")}</div></div></div><section class="related"><h2>YOU MIGHT ALSO LIKE</h2>${cards(PRODUCTS.filter(x=>x.slug!==p.slug).slice(0,4))}</section></main>`;
+}
+function about(){
+ return `<main><section class="container about-intro"><p class="eyebrow muted">SINCE 2019</p><h1>SILVER THAT ACTS LIKE ARMOUR</h1><p>AURVM started in a two-bench studio with one rule: nothing hollow. Every chain, ring and cuff is cast in solid 925 sterling silver, filed by hand and polished until it throws light. We drop in small runs, and when a run sells out it does not come back.</p></section><img src="assets/editorial.jpg" style="width:100%;height:50vh;object-fit:cover" alt="Layered silver chains"><section class="about-values"><div><h2>SOLID, NEVER PLATED</h2><p>925 sterling throughout — no filler, no flash-plating.</p></div><div><h2>SMALL BATCH</h2><p>Runs of 150 pieces or fewer, then the mould is retired.</p></div><div><h2>LIFETIME POLISH</h2><p>Send any AURVM piece back for free re-polishing, forever.</p></div></section><section class="section center"><h2 style="font-size:48px">WEAR IT EVERY DAY</h2><a class="btn btn-primary" style="margin-top:24px" href="/shop">SHOP THE RANGE</a></section></main>`;
+}
+function contact(){
+ return `<main class="container"><p class="eyebrow muted">WE REPLY IN ONE WORKING DAY</p><h1 class="page-title">GET IN TOUCH</h1><div class="form-grid" style="margin-top:48px"><div id="contactBox"><form id="contactForm"><div class="field"><label class="eyebrow muted" for="name">NAME</label><input id="name" required></div><div class="field"><label class="eyebrow muted" for="email">EMAIL</label><input id="email" type="email" required></div><div class="field"><label class="eyebrow muted" for="message">MESSAGE</label><textarea id="message" rows="5" required></textarea></div><button class="btn btn-primary" type="submit">SEND MESSAGE</button></form><div class="muted" style="font-size:14px;margin-top:40px;line-height:1.6"><p>studio@aurvm.example</p><p>+91 98000 00000 · Mon–Sat, 10am–7pm IST</p><p>Unit 4, Silver Lane, Mumbai 400001</p></div></div><div><h2 style="font-size:40px">FAQ</h2><dl class="faq">${[["How fast do you ship?","Every order leaves the studio within 48 hours, India-wide."],["Can I return a piece?","Yes — 7 days, unworn, with the original pouch."],["How do I find my ring size?","Message us your finger circumference in mm and we'll size it."],["Will it tarnish?","All pieces are anti-tarnish finished; free re-polishing for life."]].map(x=>`<div class="faq-item"><dt>${x[0]}</dt><dd>${x[1]}</dd></div>`).join("")}</dl></div></div></main>`;
+}
+function cartPage(){
+ const detailed=cart.map(x=>({...x,product:getProduct(x.slug)})).filter(x=>x.product);
+ if(!detailed.length)return `<main class="container"><h1 class="page-title">YOUR CART</h1><div class="empty"><p class="muted">Your cart is empty.</p><a class="btn btn-primary" style="margin-top:24px" href="/shop">SHOP THE DROP</a></div></main>`;
+ const subtotal=detailed.reduce((n,x)=>n+x.product.price*x.qty,0);
+ return `<main class="container"><h1 class="page-title">YOUR CART</h1><div class="cart-layout"><ul class="cart-list">${detailed.map(x=>`<li class="cart-row"><img src="${x.product.img}" alt="${x.product.name}"><div class="cart-main"><a class="cart-name" href="/product/${x.product.slug}">${x.product.name}</a><p class="cart-meta">Size ${x.size}</p><p style="font-size:14px">${money(x.product.price)}</p><div class="qty"><button data-minus="${x.slug}|${x.size}">−</button><span>${x.qty}</span><button data-plus="${x.slug}|${x.size}">+</button></div><button class="icon-btn muted" style="margin-top:10px" data-remove="${x.slug}|${x.size}" aria-label="Remove item">Remove</button></div><p style="font-size:14px">${money(x.product.price*x.qty)}</p></li>`).join("")}</ul><aside class="summary"><h2>SUMMARY</h2><div class="summary-line"><span class="muted">Subtotal</span><span>${money(subtotal)}</span></div><div class="summary-line"><span class="muted">Shipping</span><span>Free</span></div><div class="summary-line summary-total"><span>Total</span><span>${money(subtotal)}</span></div><button class="btn btn-primary" style="width:100%;margin-top:24px" id="checkout">CHECKOUT</button><a class="btn" style="width:100%;text-align:center;margin-top:12px" href="/shop">CONTINUE SHOPPING</a></aside></div></main>`;
+}
+function render(){
+ const path=location.pathname.replace(/\/$/,"")||"/";
+ let content;
+ if(path==="/")content=home();
+ else if(path==="/shop")content=shop();
+ else if(path.startsWith("/shop/"))content=shop(path.split("/")[2]);
+ else if(path.startsWith("/product/")){const p=getProduct(path.split("/")[2]);content=p?productPage(p):notFound()}
+ else if(path==="/about")content=about();
+ else if(path==="/contact")content=contact();
+ else if(path==="/cart")content=cartPage();
+ else content=notFound();
+ $("#app").innerHTML=header()+content+footer();
+ updateBadge(); bind();
+ window.scrollTo(0,0);
+}
+function notFound(){return `<main class="container center" style="min-height:55vh;padding-top:100px"><h1 style="font-size:90px">404</h1><h2 style="font-family:Barlow;font-size:20px">Page not found</h2><p class="muted">The page you're looking for doesn't exist or has been moved.</p><a class="btn btn-primary" style="margin-top:24px" href="/">GO HOME</a></main>`}
+function bind(){
+ $("#menuBtn")?.addEventListener("click",()=>{menuOpen=!menuOpen;render()});
+ document.querySelectorAll("a[href^='/']").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();history.pushState({},'',a.getAttribute("href"));menuOpen=false;render()}));
+ $("#addBtn")?.addEventListener("click",()=>{const p=getProduct(location.pathname.split("/")[2]);const s=document.querySelector(".size.selected")?.dataset.size||p.sizes[0];addCart(p.slug,s);const b=$("#addBtn");b.textContent="✓  ADDED TO CART";setTimeout(()=>b.textContent="ADD TO CART",1800)});
+ document.querySelectorAll(".size").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".size").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}));
+ document.querySelectorAll("[data-minus]").forEach(b=>b.onclick=()=>{const [s,z]=b.dataset.minus.split("|");const x=cart.find(i=>i.slug===s&&i.size===z);setQty(s,z,(x?.qty||1)-1);render()});
+ document.querySelectorAll("[data-plus]").forEach(b=>b.onclick=()=>{const [s,z]=b.dataset.plus.split("|");const x=cart.find(i=>i.slug===s&&i.size===z);setQty(s,z,(x?.qty||0)+1);render()});
+ document.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>{const [s,z]=b.dataset.remove.split("|");removeCart(s,z);render()});
+ $("#checkout")?.addEventListener("click",()=>{cart=[];persist();$("#app").innerHTML=header()+`<main class="order-success"><h1>ORDER PLACED</h1><p class="muted">Thanks — your pieces are being packed. You'll get a dispatch email within 48 hours.</p><a class="btn btn-primary" style="margin-top:24px" href="/shop">KEEP SHOPPING</a></main>`+footer();bind()});
+ $("#contactForm")?.addEventListener("submit",e=>{e.preventDefault();$("#contactBox").innerHTML=`<div style="border:1px solid var(--border);padding:32px"><h2 style="font-size:36px">MESSAGE SENT</h2><p class="muted">Thanks for reaching out — the studio will get back to you shortly.</p></div><div class="muted" style="font-size:14px;margin-top:40px;line-height:1.6"><p>studio@aurvm.example</p><p>+91 98000 00000 · Mon–Sat, 10am–7pm IST</p><p>Unit 4, Silver Lane, Mumbai 400001</p></div>`});
+}
+let seconds=12*3600;
+function tick(){seconds=Math.max(0,seconds-1);const d=Math.floor(seconds/86400),h=Math.floor(seconds%86400/3600),m=Math.floor(seconds%3600/60),s=seconds%60;const el=$("#countdown");if(el)el.innerHTML=[[d,"DAY"],[h,"HRS"],[m,"MIN"],[s,"SEC"]].map(x=>`<div><div class="num">${String(x[0]).padStart(2,"0")}</div><small>${x[1]}</small></div>`).join("")}
+window.addEventListener("popstate",render);render();tick();setInterval(tick,1000);
+
+
+    </script>
+
+</body>
+
+</html>
