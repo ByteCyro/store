@@ -1,0 +1,32 @@
+DEPLOY THIS VERSION
+
+IMPORTANT: replace the old deployment with ALL files:
+- index.html
+- _redirects
+- netlify.toml
+- assets/
+- favicon.ico
+
+Do not upload only index.html.
+
+Git:
+git add .
+git commit -m "Fix blank page and Netlify routes"
+git push
+
+After Netlify deploys:
+1. Open the newest deploy.
+2. Ctrl+Shift+R in the browser.
+3. Test:
+   /              home
+   /login         customer login
+   /admin         admin login
+   /cart          cart
+
+Admin:
+admin@aurvm.com
+admin123
+
+Account icon:
+logged out -> /login
+logged in -> /account

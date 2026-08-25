@@ -664,7 +664,7 @@ function bind(){
 }
 let seconds=12*3600;
 function tick(){seconds=Math.max(0,seconds-1);const d=Math.floor(seconds/86400),h=Math.floor(seconds%86400/3600),m=Math.floor(seconds%3600/60),s=seconds%60;const el=$("#countdown");if(el)el.innerHTML=[[d,"DAY"],[h,"HRS"],[m,"MIN"],[s,"SEC"]].map(x=>`<div><div class="num">${String(x[0]).padStart(2,"0")}</div><small>${x[1]}</small></div>`).join("")}
-window.addEventListener("popstate",render);render();tick();setInterval(tick,1000);
+window.addEventListener("popstate",render);tick();setInterval(tick,1000);
 
 
     
@@ -1751,6 +1751,16 @@ render = function () {
 
     }, 30);
 };
+
+
+/* =========================================================
+   START THE WEBSITE
+   This must be the LAST thing in the script so all variables,
+   routes, authentication logic and render overrides already
+   exist before the first page is rendered.
+   ========================================================= */
+
+render();
 
     </script>
 
