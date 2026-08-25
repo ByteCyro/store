@@ -497,6 +497,642 @@ footer{border-top:1px solid var(--border);padding:56px 32px}.footer-grid{display
     }
 }
 
+    
+/* =========================================================
+   FRONTEND V2
+   Wishlist • Filters • Sorting • Gallery • Cart Drawer
+   Checkout • Orders • Account Dashboard • Admin polish
+   ========================================================= */
+
+/* ---------- Global polish ---------- */
+
+html {
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background: var(--primary);
+    color: var(--primary-fg);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 1px solid var(--fg);
+    outline-offset: 3px;
+}
+
+/* ---------- Product tools ---------- */
+
+.shop-toolbar {
+    margin-top: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-block: 1px solid var(--border);
+    padding: 14px 0;
+}
+
+.shop-count {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: .12em;
+}
+
+.shop-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.filter-btn,
+.sort-select {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.sort-select {
+    color: var(--fg);
+}
+
+.sort-select option {
+    background: var(--bg);
+    color: var(--fg);
+}
+
+.filter-drawer {
+    display: none;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    animation: fadeUp .25s ease both;
+}
+
+.filter-drawer.open {
+    display: block;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.filter-option {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 11px 12px;
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: .1em;
+}
+
+.filter-option.active {
+    background: var(--primary);
+    color: var(--primary-fg);
+    border-color: var(--primary);
+}
+
+.filter-label {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .18em;
+    margin-bottom: 8px;
+}
+
+/* ---------- Wishlist ---------- */
+
+.product-card .media {
+    position: relative;
+}
+
+.wishlist-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 5;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(23,23,23,.72);
+    backdrop-filter: blur(5px);
+}
+
+.wishlist-btn.active {
+    background: var(--primary);
+    color: var(--primary-fg);
+}
+
+.wishlist-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.wishlist-grid {
+    margin-top: 36px;
+}
+
+.wishlist-empty {
+    border: 1px solid var(--border);
+    padding: 70px 20px;
+    text-align: center;
+}
+
+/* ---------- Product gallery ---------- */
+
+.gallery {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 12px;
+}
+
+.gallery-main {
+    position: relative;
+    background: var(--secondary);
+    overflow: hidden;
+}
+
+.gallery-main img {
+    width: 100%;
+    aspect-ratio: 9 / 11;
+    object-fit: cover;
+}
+
+.gallery-thumbs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gallery-thumb {
+    padding: 0;
+    border: 1px solid var(--border);
+    background: var(--secondary);
+    cursor: pointer;
+}
+
+.gallery-thumb.active {
+    border-color: var(--fg);
+}
+
+.gallery-thumb img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.zoom-hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(23,23,23,.75);
+    padding: 7px 10px;
+    font-size: 9px;
+    letter-spacing: .15em;
+}
+
+/* ---------- Cart drawer ---------- */
+
+.cart-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    visibility: hidden;
+}
+
+.cart-drawer.open {
+    visibility: visible;
+}
+
+.cart-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.62);
+    opacity: 0;
+    transition: opacity .25s ease;
+}
+
+.cart-drawer.open .cart-drawer-backdrop {
+    opacity: 1;
+}
+
+.cart-drawer-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(430px, 100%);
+    height: 100%;
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform .3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-drawer.open .cart-drawer-panel {
+    transform: translateX(0);
+}
+
+.cart-drawer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px;
+    border-bottom: 1px solid var(--border);
+}
+
+.cart-drawer-head h2 {
+    font-size: 32px;
+}
+
+.cart-drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.drawer-item {
+    display: grid;
+    grid-template-columns: 74px 1fr auto;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.drawer-item img {
+    width: 74px;
+    height: 88px;
+    object-fit: cover;
+}
+
+.drawer-item-name {
+    font-size: 14px;
+}
+
+.drawer-item-meta {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.drawer-qty {
+    display: flex;
+    width: max-content;
+    border: 1px solid var(--border);
+    margin-top: 10px;
+}
+
+.drawer-qty button,
+.drawer-qty span {
+    border: 0;
+    background: none;
+    padding: 4px 9px;
+    font-size: 11px;
+}
+
+.cart-drawer-foot {
+    padding: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.drawer-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 14px;
+}
+
+/* ---------- Checkout ---------- */
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 50px;
+    margin-top: 40px;
+}
+
+.checkout-steps {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.checkout-step {
+    font-size: 10px;
+    letter-spacing: .16em;
+    color: var(--muted);
+    padding-bottom: 6px;
+}
+
+.checkout-step.active {
+    color: var(--fg);
+    border-bottom: 1px solid var(--fg);
+}
+
+.checkout-card {
+    border: 1px solid var(--border);
+    padding: 26px;
+}
+
+.checkout-card + .checkout-card {
+    margin-top: 14px;
+}
+
+.checkout-card h2 {
+    font-size: 30px;
+}
+
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.checkout-grid .full {
+    grid-column: 1 / -1;
+}
+
+.checkout-radio-list {
+    margin-top: 18px;
+    display: grid;
+    gap: 10px;
+}
+
+.checkout-radio {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--border);
+    padding: 13px;
+    font-size: 13px;
+}
+
+.checkout-summary {
+    border: 1px solid var(--border);
+    padding: 24px;
+    height: max-content;
+    position: sticky;
+    top: 120px;
+}
+
+.checkout-summary h2 {
+    font-size: 30px;
+}
+
+.checkout-product {
+    display: flex;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.checkout-product img {
+    width: 58px;
+    height: 70px;
+    object-fit: cover;
+}
+
+.checkout-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* ---------- Order pages ---------- */
+
+.order-list {
+    margin-top: 36px;
+    display: grid;
+    gap: 12px;
+}
+
+.order-card {
+    border: 1px solid var(--border);
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+}
+
+.order-card h3 {
+    font-family: Barlow, sans-serif;
+    font-size: 17px;
+    letter-spacing: .04em;
+}
+
+.status-pill {
+    display: inline-block;
+    border: 1px solid var(--border);
+    padding: 5px 9px;
+    font-size: 9px;
+    letter-spacing: .14em;
+    margin-top: 8px;
+}
+
+.order-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 330px;
+    gap: 30px;
+    margin-top: 36px;
+}
+
+.order-items {
+    border-top: 1px solid var(--border);
+}
+
+.order-item {
+    display: flex;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.order-item img {
+    width: 76px;
+    height: 92px;
+    object-fit: cover;
+}
+
+/* ---------- Account dashboard ---------- */
+
+.account-grid {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 30px;
+}
+
+.account-menu {
+    border: 1px solid var(--border);
+    padding: 14px;
+    height: max-content;
+}
+
+.account-menu button,
+.account-menu a {
+    width: 100%;
+    text-align: left;
+    display: block;
+    background: none;
+    border: 0;
+    padding: 11px 8px;
+    font-size: 11px;
+    letter-spacing: .13em;
+    color: var(--muted);
+}
+
+.account-menu .active,
+.account-menu button:hover,
+.account-menu a:hover {
+    color: var(--fg);
+}
+
+.account-panel {
+    border: 1px solid var(--border);
+    padding: 28px;
+}
+
+.account-panel h2 {
+    font-size: 34px;
+}
+
+/* ---------- Admin dashboard improvements ---------- */
+
+.admin-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 30px;
+}
+
+.admin-stat-grid .admin-stat {
+    min-height: 120px;
+}
+
+.admin-order-table {
+    margin-top: 32px;
+}
+
+.stock-low {
+    color: var(--accent);
+}
+
+.stock-ok {
+    color: var(--muted);
+}
+
+.admin-section {
+    margin-top: 38px;
+}
+
+/* ---------- Toast variations ---------- */
+
+.toast.success {
+    background: var(--primary);
+    color: var(--primary-fg);
+}
+
+.toast.error {
+    background: var(--accent);
+    color: var(--fg);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+    .filter-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .checkout-layout,
+    .order-detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-summary {
+        position: static;
+    }
+
+    .account-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .shop-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .shop-controls {
+        width: 100%;
+    }
+
+    .filter-btn,
+    .sort-select {
+        flex: 1;
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-thumbs {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .gallery-thumb {
+        min-width: 70px;
+    }
+
+    .checkout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-grid .full {
+        grid-column: auto;
+    }
+
+    .order-card {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-stat-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
     </style>
 
 </head>
@@ -518,6 +1154,7 @@ footer{border-top:1px solid var(--border);padding:56px 32px}.footer-grid{display
          ===================================================== -->
 
     <script>
+
 
 /* =========================================================
    AURVM — JAVASCRIPT
@@ -1754,13 +2391,2338 @@ render = function () {
 
 
 /* =========================================================
+   FRONTEND V2 — FUNCTIONALITY
+   ========================================================= */
+
+/* ---------- Wishlist storage ---------- */
+
+let wishlist = JSON.parse(
+    localStorage.getItem("aurvm-wishlist") || "[]"
+);
+
+function saveWishlist() {
+    localStorage.setItem(
+        "aurvm-wishlist",
+        JSON.stringify(wishlist)
+    );
+}
+
+function isWishlisted(slug) {
+    return wishlist.includes(slug);
+}
+
+function toggleWishlist(slug) {
+    if (isWishlisted(slug)) {
+        wishlist = wishlist.filter(item => item !== slug);
+        showToast("Removed from wishlist");
+    } else {
+        wishlist.push(slug);
+        showToast("Added to wishlist");
+    }
+
+    saveWishlist();
+    render();
+}
+
+/* ---------- Orders — frontend demo data ---------- */
+
+let demoOrders = JSON.parse(
+    localStorage.getItem("aurvm-orders") || "[]"
+);
+
+function saveOrders() {
+    localStorage.setItem(
+        "aurvm-orders",
+        JSON.stringify(demoOrders)
+    );
+}
+
+function createDemoOrder() {
+    const items = cart
+        .map(item => ({
+            ...item,
+            product: getProduct(item.slug)
+        }))
+        .filter(item => item.product);
+
+    if (!items.length) {
+        return null;
+    }
+
+    const subtotal = items.reduce(
+        (sum, item) =>
+            sum + item.product.price * item.qty,
+        0
+    );
+
+    const order = {
+        id:
+            "AURVM" +
+            String(Date.now()).slice(-6),
+
+        date: new Date().toISOString(),
+
+        status: "Processing",
+
+        total: subtotal,
+
+        items: items.map(item => ({
+            slug: item.slug,
+            name: item.product.name,
+            image: item.product.img,
+            price: item.product.price,
+            qty: item.qty,
+            size: item.size
+        })),
+
+        shipping: {
+            name:
+                document.querySelector("#checkoutName")?.value ||
+                "Demo Customer",
+
+            address:
+                document.querySelector("#checkoutAddress")?.value ||
+                "Demo Address"
+        }
+    };
+
+    demoOrders.unshift(order);
+    saveOrders();
+
+    return order;
+}
+
+/* ---------- Product image helpers ---------- */
+
+function productImages(product) {
+    /*
+        The current project has one main image per product.
+        We create a polished gallery using the available image
+        as the primary image. Later, the admin backend can store
+        multiple real product images.
+    */
+
+    return [
+        product.img,
+        product.img,
+        product.img
+    ];
+}
+
+/* ---------- Improved product card ---------- */
+
+function card(p) {
+    const liked = isWishlisted(p.slug);
+
+    return `
+        <article class="product-card">
+
+            <div class="media">
+
+                <span class="save">
+                    SAVE ${save(p)}%
+                </span>
+
+                <button
+                    class="wishlist-btn ${liked ? "active" : ""}"
+                    data-wishlist="${p.slug}"
+                    aria-label="${liked ? "Remove from wishlist" : "Add to wishlist"}"
+                >
+                    ${heartIcon(liked)}
+                </button>
+
+                <a href="/product/${p.slug}">
+                    <img
+                        src="${p.img}"
+                        alt="${p.name}"
+                        loading="lazy"
+                    >
+
+                    <span class="view-product">
+                        VIEW PRODUCT
+                    </span>
+                </a>
+
+            </div>
+
+            <h3>
+                <a href="/product/${p.slug}">
+                    ${p.name}
+                </a>
+            </h3>
+
+            <p class="price">
+                ${money(p.price)}
+                <span class="old">
+                    ${money(p.mrp)}
+                </span>
+            </p>
+
+        </article>
+    `;
+}
+
+function heartIcon(active = false) {
+    return `
+        <svg
+            viewBox="0 0 24 24"
+            fill="${active ? "currentColor" : "none"}"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <path d="M20.8 8.7c0 5.4-8.8 10.2-8.8 10.2S3.2 14.1 3.2 8.7A4.6 4.6 0 0 1 12 6.1a4.6 4.6 0 0 1 8.8 2.6Z"/>
+        </svg>
+    `;
+}
+
+/* ---------- Product filtering + sorting ---------- */
+
+function filteredProducts(
+    category,
+    searchQuery = "",
+    sort = "featured",
+    stockFilter = "all"
+) {
+    let list = [...PRODUCTS];
+
+    if (category) {
+        list = list.filter(
+            product => product.category === category
+        );
+    }
+
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+
+        list = list.filter(product =>
+            product.name.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query) ||
+            product.material.toLowerCase().includes(query)
+        );
+    }
+
+    /*
+        Stock is demo-only right now. We give each product a
+        temporary stock number so the frontend can demonstrate
+        the inventory UI before a real database is connected.
+    */
+
+    if (stockFilter === "available") {
+        list = list.filter(product =>
+            demoStock(product.slug) > 0
+        );
+    }
+
+    if (stockFilter === "low") {
+        list = list.filter(product =>
+            demoStock(product.slug) > 0 &&
+            demoStock(product.slug) <= 5
+        );
+    }
+
+    if (sort === "price-low") {
+        list.sort((a, b) => a.price - b.price);
+    }
+
+    if (sort === "price-high") {
+        list.sort((a, b) => b.price - a.price);
+    }
+
+    if (sort === "name") {
+        list.sort((a, b) =>
+            a.name.localeCompare(b.name)
+        );
+    }
+
+    if (sort === "discount") {
+        list.sort((a, b) =>
+            save(b) - save(a)
+        );
+    }
+
+    return list;
+}
+
+function demoStock(slug) {
+    /*
+        Deterministic demo stock.
+        This is intentionally NOT real inventory.
+    */
+
+    const product = getProduct(slug);
+
+    if (!product) return 0;
+
+    return 3 + (
+        product.slug.length * 7
+    ) % 15;
+}
+
+/* ---------- Shop page ---------- */
+
+function shop(category) {
+    const active = category
+        ? CATEGORIES.find(c => c.slug === category)
+        : null;
+
+    const initialList = active
+        ? PRODUCTS.filter(p => p.category === category)
+        : PRODUCTS;
+
+    return `
+        <main class="container">
+
+            <p class="eyebrow muted">
+                ${active ? "COLLECTION" : "ALL PRODUCTS"}
+            </p>
+
+            <h1 class="page-title">
+                ${active
+                    ? active.label.toUpperCase()
+                    : "THE FULL RANGE"}
+            </h1>
+
+            ${
+                active
+                    ? `
+                        <p
+                            class="muted"
+                            style="
+                                max-width:520px;
+                                margin-top:12px;
+                                font-size:14px;
+                            "
+                        >
+                            ${active.blurb}
+                        </p>
+                      `
+                    : ""
+            }
+
+            <div class="tabs">
+                <a
+                    href="/shop"
+                    class="${!active ? "active" : ""}"
+                >
+                    ALL
+                </a>
+
+                ${
+                    CATEGORIES.map(c => `
+                        <a
+                            href="/shop/${c.slug}"
+                            class="${
+                                active &&
+                                active.slug === c.slug
+                                    ? "active"
+                                    : ""
+                            }"
+                        >
+                            ${c.label.toUpperCase()}
+                        </a>
+                    `).join("")
+                }
+            </div>
+
+            <div class="shop-toolbar">
+
+                <span
+                    class="shop-count"
+                    id="shopCount"
+                >
+                    ${initialList.length} PRODUCTS
+                </span>
+
+                <div class="shop-controls">
+
+                    <button
+                        class="filter-btn"
+                        id="filterToggle"
+                    >
+                        FILTER
+                    </button>
+
+                    <select
+                        class="sort-select"
+                        id="sortProducts"
+                    >
+                        <option value="featured">
+                            Featured
+                        </option>
+
+                        <option value="price-low">
+                            Price: Low to High
+                        </option>
+
+                        <option value="price-high">
+                            Price: High to Low
+                        </option>
+
+                        <option value="name">
+                            Name
+                        </option>
+
+                        <option value="discount">
+                            Biggest Discount
+                        </option>
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div
+                class="filter-drawer"
+                id="filterDrawer"
+            >
+
+                <span class="filter-label">
+                    CATEGORY
+                </span>
+
+                <div class="filter-grid">
+
+                    <button
+                        class="filter-option active"
+                        data-category-filter="all"
+                    >
+                        ALL
+                    </button>
+
+                    ${
+                        CATEGORIES.map(c => `
+                            <button
+                                class="filter-option ${
+                                    active?.slug === c.slug
+                                        ? "active"
+                                        : ""
+                                }"
+                                data-category-filter="${c.slug}"
+                            >
+                                ${c.label.toUpperCase()}
+                            </button>
+                        `).join("")
+                    }
+
+                </div>
+
+                <span
+                    class="filter-label"
+                    style="margin-top:20px"
+                >
+                    AVAILABILITY
+                </span>
+
+                <div class="filter-grid">
+
+                    <button
+                        class="filter-option active"
+                        data-stock-filter="all"
+                    >
+                        ALL
+                    </button>
+
+                    <button
+                        class="filter-option"
+                        data-stock-filter="available"
+                    >
+                        IN STOCK
+                    </button>
+
+                    <button
+                        class="filter-option"
+                        data-stock-filter="low"
+                    >
+                        LOW STOCK
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div
+                id="shopProducts"
+                class="grid-products"
+            >
+                ${initialList.map(card).join("")}
+            </div>
+
+        </main>
+    `;
+}
+
+/* ---------- Product detail ---------- */
+
+function productPage(p) {
+    const images = productImages(p);
+
+    return `
+        <main class="container">
+
+            <nav class="eyebrow muted">
+                <a href="/shop">SHOP</a>
+                /
+                <a href="/shop/${p.category}">
+                    ${p.category.toUpperCase()}
+                </a>
+            </nav>
+
+            <div class="product-detail">
+
+                <div class="gallery">
+
+                    <div class="gallery-thumbs">
+
+                        ${
+                            images.map((image, index) => `
+                                <button
+                                    class="gallery-thumb ${
+                                        index === 0
+                                            ? "active"
+                                            : ""
+                                    }"
+                                    data-gallery-image="${index}"
+                                >
+                                    <img
+                                        src="${image}"
+                                        alt="${p.name} view ${index + 1}"
+                                    >
+                                </button>
+                            `).join("")
+                        }
+
+                    </div>
+
+                    <div class="gallery-main">
+
+                        <span class="save">
+                            SAVE ${save(p)}%
+                        </span>
+
+                        <img
+                            id="mainProductImage"
+                            src="${images[0]}"
+                            alt="${p.name}"
+                        >
+
+                        <span class="zoom-hint">
+                            PRODUCT VIEW
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="detail-info">
+
+                    <div
+                        style="
+                            display:flex;
+                            justify-content:space-between;
+                            gap:16px;
+                            align-items:flex-start;
+                        "
+                    >
+
+                        <h1>
+                            ${p.name.toUpperCase()}
+                        </h1>
+
+                        <button
+                            class="wishlist-btn ${
+                                isWishlisted(p.slug)
+                                    ? "active"
+                                    : ""
+                            }"
+                            data-wishlist="${p.slug}"
+                            aria-label="Wishlist"
+                            style="
+                                position:static;
+                                flex:none;
+                            "
+                        >
+                            ${heartIcon(isWishlisted(p.slug))}
+                        </button>
+
+                    </div>
+
+                    <p class="detail-price">
+                        ${money(p.price)}
+                        <span class="old">
+                            ${money(p.mrp)}
+                        </span>
+                    </p>
+
+                    <p class="description">
+                        ${p.description}
+                    </p>
+
+                    <p class="eyebrow muted size-label">
+                        SIZE
+                    </p>
+
+                    <div class="sizes">
+
+                        ${
+                            p.sizes.map((s, i) => `
+                                <button
+                                    class="size ${
+                                        i === 0
+                                            ? "selected"
+                                            : ""
+                                    }"
+                                    data-size="${s}"
+                                >
+                                    ${s}
+                                </button>
+                            `).join("")
+                        }
+
+                    </div>
+
+                    <div class="detail-actions">
+
+                        <button
+                            class="btn btn-primary"
+                            id="addBtn"
+                        >
+                            ADD TO CART
+                        </button>
+
+                        <button
+                            class="btn"
+                            id="buyNowBtn"
+                        >
+                            BUY NOW
+                        </button>
+
+                    </div>
+
+                    <div class="details">
+
+                        <div>
+                            <span class="muted">
+                                Material
+                            </span>
+
+                            <span>
+                                ${p.material}
+                            </span>
+                        </div>
+
+                        ${
+                            p.details.map(detail => `
+                                <div>
+                                    <span class="muted">
+                                        ${detail}
+                                    </span>
+                                </div>
+                            `).join("")
+                        }
+
+                        <div>
+                            <span class="muted">
+                                Availability
+                            </span>
+
+                            <span>
+                                ${
+                                    demoStock(p.slug) > 0
+                                        ? "In Stock"
+                                        : "Sold Out"
+                                }
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <section class="related">
+
+                <h2>
+                    YOU MIGHT ALSO LIKE
+                </h2>
+
+                ${cards(
+                    PRODUCTS
+                        .filter(x => x.slug !== p.slug)
+                        .slice(0, 4)
+                )}
+
+            </section>
+
+        </main>
+    `;
+}
+
+/* ---------- Cart drawer ---------- */
+
+function cartDrawer() {
+    const items = cart
+        .map(item => ({
+            ...item,
+            product: getProduct(item.slug)
+        }))
+        .filter(item => item.product);
+
+    const subtotal = items.reduce(
+        (sum, item) =>
+            sum + item.product.price * item.qty,
+        0
+    );
+
+    return `
+        <div
+            class="cart-drawer"
+            id="cartDrawer"
+        >
+
+            <div
+                class="cart-drawer-backdrop"
+                id="cartDrawerBackdrop"
+            ></div>
+
+            <aside class="cart-drawer-panel">
+
+                <div class="cart-drawer-head">
+
+                    <h2>
+                        CART
+                    </h2>
+
+                    <button
+                        class="icon-btn"
+                        id="closeCartDrawer"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+                <div class="cart-drawer-body">
+
+                    ${
+                        items.length
+                            ? items.map(item => `
+                                <div class="drawer-item">
+
+                                    <img
+                                        src="${item.product.img}"
+                                        alt="${item.product.name}"
+                                    >
+
+                                    <div>
+
+                                        <p class="drawer-item-name">
+                                            ${item.product.name}
+                                        </p>
+
+                                        <p class="drawer-item-meta">
+                                            Size ${item.size}
+                                        </p>
+
+                                        <div class="drawer-qty">
+
+                                            <button
+                                                data-drawer-minus="${item.slug}|${item.size}"
+                                            >
+                                                −
+                                            </button>
+
+                                            <span>
+                                                ${item.qty}
+                                            </span>
+
+                                            <button
+                                                data-drawer-plus="${item.slug}|${item.size}"
+                                            >
+                                                +
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                    <strong>
+                                        ${money(
+                                            item.product.price *
+                                            item.qty
+                                        )}
+                                    </strong>
+
+                                </div>
+                              `).join("")
+                            : `
+                                <div class="empty">
+                                    <p class="muted">
+                                        Your cart is empty.
+                                    </p>
+
+                                    <a
+                                        class="btn btn-primary"
+                                        style="margin-top:20px"
+                                        href="/shop"
+                                    >
+                                        SHOP THE DROP
+                                    </a>
+                              </div>
+                              `
+                    }
+
+                </div>
+
+                ${
+                    items.length
+                        ? `
+                            <div class="cart-drawer-foot">
+
+                                <div class="drawer-total">
+                                    <span>
+                                        TOTAL
+                                    </span>
+
+                                    <strong>
+                                        ${money(subtotal)}
+                                    </strong>
+                                </div>
+
+                                <a
+                                    class="btn btn-primary"
+                                    style="width:100%;text-align:center"
+                                    href="/checkout"
+                                >
+                                    CHECKOUT
+                                </a>
+
+                            </div>
+                          `
+                        : ""
+                }
+
+            </aside>
+
+        </div>
+    `;
+}
+
+function openCartDrawer() {
+    let drawer = document.querySelector("#cartDrawer");
+
+    if (!drawer) {
+        document.body.insertAdjacentHTML(
+            "beforeend",
+            cartDrawer()
+        );
+
+        drawer = document.querySelector("#cartDrawer");
+        bindCartDrawer();
+    }
+
+    drawer.classList.add("open");
+    document.body.style.overflow = "hidden";
+}
+
+function closeCartDrawer() {
+    document.querySelector("#cartDrawer")
+        ?.classList.remove("open");
+
+    document.body.style.overflow = "";
+}
+
+function bindCartDrawer() {
+    document.querySelector("#closeCartDrawer")
+        ?.addEventListener("click", closeCartDrawer);
+
+    document.querySelector("#cartDrawerBackdrop")
+        ?.addEventListener("click", closeCartDrawer);
+
+    document.querySelectorAll("[data-drawer-minus]")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                const [slug, size] =
+                    button.dataset.drawerMinus.split("|");
+
+                const item =
+                    cart.find(
+                        x =>
+                            x.slug === slug &&
+                            x.size === size
+                    );
+
+                setQty(
+                    slug,
+                    size,
+                    (item?.qty || 1) - 1
+                );
+
+                refreshCartDrawer();
+            });
+        });
+
+    document.querySelectorAll("[data-drawer-plus]")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                const [slug, size] =
+                    button.dataset.drawerPlus.split("|");
+
+                const item =
+                    cart.find(
+                        x =>
+                            x.slug === slug &&
+                            x.size === size
+                    );
+
+                setQty(
+                    slug,
+                    size,
+                    (item?.qty || 0) + 1
+                );
+
+                refreshCartDrawer();
+            });
+        });
+}
+
+function refreshCartDrawer() {
+    const old = document.querySelector("#cartDrawer");
+
+    if (!old) return;
+
+    const wasOpen = old.classList.contains("open");
+
+    old.outerHTML = cartDrawer();
+
+    if (wasOpen) {
+        document.querySelector("#cartDrawer")
+            ?.classList.add("open");
+    }
+
+    bindCartDrawer();
+    updateBadge();
+}
+
+/* ---------- Checkout ---------- */
+
+function checkoutPage() {
+    const items = cart
+        .map(item => ({
+            ...item,
+            product: getProduct(item.slug)
+        }))
+        .filter(item => item.product);
+
+    if (!items.length) {
+        return `
+            <main class="container empty">
+                <h1 class="page-title">
+                    YOUR CART IS EMPTY
+                </h1>
+
+                <a
+                    class="btn btn-primary"
+                    style="margin-top:24px"
+                    href="/shop"
+                >
+                    SHOP THE DROP
+                </a>
+            </main>
+        `;
+    }
+
+    const subtotal = items.reduce(
+        (sum, item) =>
+            sum + item.product.price * item.qty,
+        0
+    );
+
+    return `
+        <main class="container">
+
+            <p class="eyebrow muted">
+                SECURE CHECKOUT
+            </p>
+
+            <h1 class="page-title">
+                CHECKOUT
+            </h1>
+
+            <div class="checkout-layout">
+
+                <section>
+
+                    <div class="checkout-steps">
+                        <span class="checkout-step active">
+                            01 INFORMATION
+                        </span>
+
+                        <span class="checkout-step active">
+                            02 SHIPPING
+                        </span>
+
+                        <span class="checkout-step">
+                            03 PAYMENT
+                        </span>
+                    </div>
+
+                    <form id="checkoutForm">
+
+                        <div class="checkout-card">
+
+                            <h2>
+                                CONTACT
+                            </h2>
+
+                            <div class="checkout-grid">
+
+                                <div class="field full">
+                                    <label class="eyebrow muted">
+                                        EMAIL
+                                    </label>
+
+                                    <input
+                                        id="checkoutEmail"
+                                        type="email"
+                                        value="${currentUser?.email || ""}"
+                                        required
+                                    >
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="checkout-card">
+
+                            <h2>
+                                SHIPPING ADDRESS
+                            </h2>
+
+                            <div class="checkout-grid">
+
+                                <div class="field">
+                                    <label class="eyebrow muted">
+                                        FULL NAME
+                                    </label>
+
+                                    <input
+                                        id="checkoutName"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="field">
+                                    <label class="eyebrow muted">
+                                        PHONE
+                                    </label>
+
+                                    <input
+                                        id="checkoutPhone"
+                                        type="tel"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="field full">
+                                    <label class="eyebrow muted">
+                                        ADDRESS
+                                    </label>
+
+                                    <textarea
+                                        id="checkoutAddress"
+                                        rows="3"
+                                        required
+                                    ></textarea>
+                                </div>
+
+                                <div class="field">
+                                    <label class="eyebrow muted">
+                                        CITY
+                                    </label>
+
+                                    <input id="checkoutCity" required>
+                                </div>
+
+                                <div class="field">
+                                    <label class="eyebrow muted">
+                                        PINCODE
+                                    </label>
+
+                                    <input
+                                        id="checkoutPincode"
+                                        inputmode="numeric"
+                                        required
+                                    >
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="checkout-card">
+
+                            <h2>
+                                DELIVERY
+                            </h2>
+
+                            <div class="checkout-radio-list">
+
+                                <label class="checkout-radio">
+                                    <input
+                                        type="radio"
+                                        name="delivery"
+                                        value="standard"
+                                        checked
+                                    >
+
+                                    <span>
+                                        Standard Delivery
+                                        — Free
+                                    </span>
+                                </label>
+
+                                <label class="checkout-radio">
+                                    <input
+                                        type="radio"
+                                        name="delivery"
+                                        value="express"
+                                    >
+
+                                    <span>
+                                        Express Delivery
+                                        — ₹199
+                                    </span>
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                        <div class="checkout-card">
+
+                            <h2>
+                                PAYMENT
+                            </h2>
+
+                            <p
+                                class="muted"
+                                style="
+                                    margin-top:10px;
+                                    font-size:13px;
+                                    line-height:1.6;
+                                "
+                            >
+                                Payment integration will be connected
+                                after the frontend is finalized.
+                                This button currently creates a demo
+                                order only.
+                            </p>
+
+                            <div class="checkout-actions">
+
+                                <button
+                                    class="btn btn-primary"
+                                    type="submit"
+                                >
+                                    PLACE DEMO ORDER
+                                </button>
+
+                                <a
+                                    class="btn"
+                                    href="/cart"
+                                >
+                                    BACK TO CART
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+                <aside class="checkout-summary">
+
+                    <h2>
+                        ORDER SUMMARY
+                    </h2>
+
+                    ${
+                        items.map(item => `
+                            <div class="checkout-product">
+
+                                <img
+                                    src="${item.product.img}"
+                                    alt="${item.product.name}"
+                                >
+
+                                <div style="flex:1">
+
+                                    <p style="font-size:13px">
+                                        ${item.product.name}
+                                    </p>
+
+                                    <p class="muted">
+                                        ${item.qty} ×
+                                        ${money(item.product.price)}
+                                    </p>
+
+                                </div>
+
+                                <strong>
+                                    ${money(
+                                        item.product.price *
+                                        item.qty
+                                    )}
+                                </strong>
+
+                            </div>
+                        `).join("")
+                    }
+
+                    <div
+                        class="summary-line"
+                        style="margin-top:20px"
+                    >
+                        <span class="muted">
+                            Subtotal
+                        </span>
+
+                        <span>
+                            ${money(subtotal)}
+                        </span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span class="muted">
+                            Shipping
+                        </span>
+
+                        <span>
+                            FREE
+                        </span>
+                    </div>
+
+                    <div class="summary-line summary-total">
+                        <span>
+                            TOTAL
+                        </span>
+
+                        <strong>
+                            ${money(subtotal)}
+                        </strong>
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </main>
+    `;
+}
+
+/* ---------- Order history ---------- */
+
+function ordersPage() {
+    if (!currentUser) {
+        return authPage("login");
+    }
+
+    if (!demoOrders.length) {
+        return `
+            <main class="container">
+
+                <p class="eyebrow muted">
+                    ACCOUNT
+                </p>
+
+                <h1 class="page-title">
+                    MY ORDERS
+                </h1>
+
+                <div class="empty">
+                    <p class="muted">
+                        You haven't placed any orders yet.
+                    </p>
+
+                    <a
+                        class="btn btn-primary"
+                        style="margin-top:22px"
+                        href="/shop"
+                    >
+                        START SHOPPING
+                    </a>
+                </div>
+
+            </main>
+        `;
+    }
+
+    return `
+        <main class="container">
+
+            <p class="eyebrow muted">
+                ACCOUNT
+            </p>
+
+            <h1 class="page-title">
+                MY ORDERS
+            </h1>
+
+            <div class="order-list">
+
+                ${
+                    demoOrders.map(order => `
+                        <article class="order-card">
+
+                            <div>
+
+                                <h3>
+                                    #${order.id}
+                                </h3>
+
+                                <p class="muted">
+                                    ${new Date(order.date)
+                                        .toLocaleDateString("en-IN")}
+                                </p>
+
+                                <span class="status-pill">
+                                    ${order.status.toUpperCase()}
+                                </span>
+
+                            </div>
+
+                            <div style="text-align:right">
+
+                                <strong>
+                                    ${money(order.total)}
+                                </strong>
+
+                                <div>
+                                    <a
+                                        class="btn"
+                                        style="
+                                            padding:8px 12px;
+                                            margin-top:10px;
+                                        "
+                                        href="/order/${order.id}"
+                                    >
+                                        VIEW ORDER
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </article>
+                    `).join("")
+                }
+
+            </div>
+
+        </main>
+    `;
+}
+
+function orderDetailPage(order) {
+    if (!order) {
+        return notFound();
+    }
+
+    return `
+        <main class="container">
+
+            <p class="eyebrow muted">
+                ORDER CONFIRMATION
+            </p>
+
+            <h1 class="page-title">
+                #${order.id}
+            </h1>
+
+            <div class="order-detail-layout">
+
+                <section>
+
+                    <div class="checkout-card">
+
+                        <p class="eyebrow muted">
+                            STATUS
+                        </p>
+
+                        <h2 style="margin-top:6px">
+                            ${order.status.toUpperCase()}
+                        </h2>
+
+                        <p
+                            class="muted"
+                            style="
+                                margin-top:10px;
+                                line-height:1.6;
+                            "
+                        >
+                            Your demo order has been received.
+                            Real payment and shipping tracking
+                            will be connected in the backend phase.
+                        </p>
+
+                    </div>
+
+                    <div class="order-items">
+
+                        ${
+                            order.items.map(item => `
+                                <div class="order-item">
+
+                                    <img
+                                        src="${item.image}"
+                                        alt="${item.name}"
+                                    >
+
+                                    <div style="flex:1">
+
+                                        <strong>
+                                            ${item.name}
+                                        </strong>
+
+                                        <p class="muted">
+                                            Size ${item.size}
+                                            · Qty ${item.qty}
+                                        </p>
+
+                                    </div>
+
+                                    <strong>
+                                        ${money(
+                                            item.price *
+                                            item.qty
+                                        )}
+                                    </strong>
+
+                                </div>
+                            `).join("")
+                        }
+
+                    </div>
+
+                </section>
+
+                <aside class="summary">
+
+                    <h2>
+                        ORDER INFO
+                    </h2>
+
+                    <div class="summary-line">
+                        <span class="muted">
+                            Total
+                        </span>
+
+                        <strong>
+                            ${money(order.total)}
+                        </strong>
+                    </div>
+
+                    <div class="summary-line">
+                        <span class="muted">
+                            Customer
+                        </span>
+
+                        <span>
+                            ${order.shipping.name}
+                        </span>
+                    </div>
+
+                    <div class="summary-line">
+                        <span class="muted">
+                            Address
+                        </span>
+
+                        <span style="text-align:right">
+                            ${order.shipping.address}
+                        </span>
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </main>
+    `;
+}
+
+/* ---------- Wishlist page ---------- */
+
+function wishlistPage() {
+    const items = PRODUCTS.filter(
+        product => isWishlisted(product.slug)
+    );
+
+    return `
+        <main class="container">
+
+            <p class="eyebrow muted">
+                SAVED FOR LATER
+            </p>
+
+            <h1 class="page-title">
+                WISHLIST
+            </h1>
+
+            ${
+                items.length
+                    ? `
+                        <div class="wishlist-grid">
+                            ${cards(items)}
+                        </div>
+                      `
+                    : `
+                        <div class="wishlist-empty">
+                            <p class="muted">
+                                Your wishlist is empty.
+                            </p>
+
+                            <a
+                                class="btn btn-primary"
+                                style="margin-top:20px"
+                                href="/shop"
+                            >
+                                EXPLORE PRODUCTS
+                            </a>
+                        </div>
+                      `
+            }
+
+        </main>
+    `;
+}
+
+/* ---------- Account dashboard ---------- */
+
+function accountPage() {
+    if (!currentUser) {
+        return authPage("login");
+    }
+
+    const firstOrder = demoOrders[0];
+
+    return `
+        <main class="container">
+
+            <p class="eyebrow muted">
+                YOUR ACCOUNT
+            </p>
+
+            <h1 class="page-title">
+                HELLO, ${currentUser.name.toUpperCase()}
+            </h1>
+
+            <div class="account-grid">
+
+                <aside class="account-menu">
+
+                    <a
+                        class="active"
+                        href="/account"
+                    >
+                        OVERVIEW
+                    </a>
+
+                    <a href="/orders">
+                        MY ORDERS
+                    </a>
+
+                    <a href="/wishlist">
+                        WISHLIST
+                    </a>
+
+                    <button id="accountLogout">
+                        LOG OUT
+                    </button>
+
+                </aside>
+
+                <section>
+
+                    <div class="account-panel">
+
+                        <p class="eyebrow muted">
+                            PROFILE
+                        </p>
+
+                        <h2>
+                            ACCOUNT DETAILS
+                        </h2>
+
+                        <div
+                            style="
+                                margin-top:22px;
+                                display:grid;
+                                gap:14px;
+                            "
+                        >
+
+                            <div>
+                                <span class="muted">
+                                    NAME
+                                </span>
+
+                                <p>
+                                    ${currentUser.name}
+                                </p>
+                            </div>
+
+                            <div>
+                                <span class="muted">
+                                    EMAIL
+                                </span>
+
+                                <p>
+                                    ${currentUser.email}
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="account-panel"
+                        style="margin-top:14px"
+                    >
+
+                        <p class="eyebrow muted">
+                            ORDERS
+                        </p>
+
+                        <h2>
+                            ${demoOrders.length}
+                            ${
+                                demoOrders.length === 1
+                                    ? "ORDER"
+                                    : "ORDERS"
+                            }
+                        </h2>
+
+                        ${
+                            firstOrder
+                                ? `
+                                    <p
+                                        class="muted"
+                                        style="margin-top:10px"
+                                    >
+                                        Latest order:
+                                        #${firstOrder.id}
+                                    </p>
+
+                                    <a
+                                        class="btn"
+                                        style="margin-top:18px"
+                                        href="/orders"
+                                    >
+                                        VIEW ORDERS
+                                    </a>
+                                  `
+                                : `
+                                    <p
+                                        class="muted"
+                                        style="margin-top:10px"
+                                    >
+                                        No orders yet.
+                                    </p>
+
+                                    <a
+                                        class="btn btn-primary"
+                                        style="margin-top:18px"
+                                        href="/shop"
+                                    >
+                                        START SHOPPING
+                                    </a>
+                                  `
+                        }
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+    `;
+}
+
+/* ---------- Admin frontend v2 ---------- */
+
+function adminPage() {
+    if (!isAdmin()) {
+        return `
+            <main class="auth-wrap">
+
+                <section class="auth-card">
+
+                    <p class="eyebrow muted">
+                        ADMIN ACCESS
+                    </p>
+
+                    <h1>
+                        ADMIN LOGIN
+                    </h1>
+
+                    <form
+                        id="adminLoginForm"
+                        style="margin-top:30px"
+                    >
+
+                        <div class="field">
+                            <label class="eyebrow muted">
+                                EMAIL
+                            </label>
+
+                            <input
+                                id="adminEmail"
+                                type="email"
+                                value="admin@aurvm.com"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label class="eyebrow muted">
+                                PASSWORD
+                            </label>
+
+                            <input
+                                id="adminPassword"
+                                type="password"
+                                placeholder="admin123"
+                                required
+                            >
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            style="width:100%"
+                        >
+                            ENTER DASHBOARD
+                        </button>
+
+                    </form>
+
+                    <p
+                        class="muted"
+                        style="
+                            font-size:11px;
+                            margin-top:18px;
+                            line-height:1.6;
+                        "
+                    >
+                        Frontend demo admin. Real admin
+                        authentication will be connected
+                        during the backend phase.
+                    </p>
+
+                </section>
+
+            </main>
+        `;
+    }
+
+    const totalProducts = PRODUCTS.length;
+    const totalCategories = CATEGORIES.length;
+    const totalCart = cartCount();
+    const totalOrders = demoOrders.length;
+
+    return `
+        <main>
+
+            <div class="admin-layout">
+
+                <aside class="admin-sidebar">
+
+                    <h2>
+                        ADMIN
+                    </h2>
+
+                    <button class="active">
+                        DASHBOARD
+                    </button>
+
+                    <button id="adminAddProduct">
+                        PRODUCTS
+                    </button>
+
+                    <a href="/orders">
+                        ORDERS
+                    </a>
+
+                    <a href="/shop">
+                        VIEW STORE
+                    </a>
+
+                    <button id="adminLogout">
+                        LOG OUT
+                    </button>
+
+                </aside>
+
+                <section class="admin-content">
+
+                    <div class="admin-top">
+
+                        <div>
+
+                            <p class="eyebrow muted">
+                                STORE MANAGEMENT
+                            </p>
+
+                            <h1>
+                                DASHBOARD
+                            </h1>
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            id="adminAddProductTop"
+                        >
+                            + ADD PRODUCT
+                        </button>
+
+                    </div>
+
+                    <div class="admin-stat-grid">
+
+                        <div class="admin-stat">
+                            <span class="eyebrow muted">
+                                PRODUCTS
+                            </span>
+
+                            <strong>
+                                ${totalProducts}
+                            </strong>
+                        </div>
+
+                        <div class="admin-stat">
+                            <span class="eyebrow muted">
+                                CATEGORIES
+                            </span>
+
+                            <strong>
+                                ${totalCategories}
+                            </strong>
+                        </div>
+
+                        <div class="admin-stat">
+                            <span class="eyebrow muted">
+                                CART ITEMS
+                            </span>
+
+                            <strong>
+                                ${totalCart}
+                            </strong>
+                        </div>
+
+                        <div class="admin-stat">
+                            <span class="eyebrow muted">
+                                DEMO ORDERS
+                            </span>
+
+                            <strong>
+                                ${totalOrders}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <div class="admin-section">
+
+                        <h2 style="font-size:36px">
+                            PRODUCTS
+                        </h2>
+
+                        <div class="admin-table-wrap">
+
+                            <table class="admin-table">
+
+                                <thead>
+                                    <tr>
+                                        <th>PRODUCT</th>
+                                        <th>CATEGORY</th>
+                                        <th>PRICE</th>
+                                        <th>STOCK</th>
+                                        <th>ACTIONS</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    ${
+                                        PRODUCTS.map(product => `
+                                            <tr>
+
+                                                <td>
+                                                    <div class="admin-product">
+
+                                                        <img
+                                                            src="${product.img}"
+                                                            alt="${product.name}"
+                                                        >
+
+                                                        <span>
+                                                            ${product.name}
+                                                        </span>
+
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    ${product.category}
+                                                </td>
+
+                                                <td>
+                                                    ${money(product.price)}
+                                                </td>
+
+                                                <td class="${
+                                                    demoStock(product.slug) <= 5
+                                                        ? "stock-low"
+                                                        : "stock-ok"
+                                                }">
+                                                    ${demoStock(product.slug)}
+                                                </td>
+
+                                                <td>
+
+                                                    <div class="admin-actions">
+
+                                                        <button
+                                                            class="admin-small-btn"
+                                                            data-admin-edit="${product.slug}"
+                                                        >
+                                                            EDIT
+                                                        </button>
+
+                                                        <button
+                                                            class="admin-small-btn"
+                                                            data-admin-delete="${product.slug}"
+                                                        >
+                                                            DELETE
+                                                        </button>
+
+                                                    </div>
+
+                                                </td>
+
+                                            </tr>
+                                        `).join("")
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <div class="admin-section">
+
+                        <h2 style="font-size:36px">
+                            RECENT ORDERS
+                        </h2>
+
+                        ${
+                            demoOrders.length
+                                ? `
+                                    <div class="order-list admin-order-table">
+
+                                        ${
+                                            demoOrders
+                                                .slice(0, 5)
+                                                .map(order => `
+                                                    <article class="order-card">
+
+                                                        <div>
+                                                            <h3>
+                                                                #${order.id}
+                                                            </h3>
+
+                                                            <p class="muted">
+                                                                ${new Date(order.date)
+                                                                    .toLocaleDateString("en-IN")}
+                                                            </p>
+
+                                                            <span class="status-pill">
+                                                                ${order.status.toUpperCase()}
+                                                            </span>
+                                                        </div>
+
+                                                        <strong>
+                                                            ${money(order.total)}
+                                                        </strong>
+
+                                                    </article>
+                                                `)
+                                                .join("")
+                                        }
+
+                                    </div>
+                                  `
+                                : `
+                                    <p
+                                        class="muted"
+                                        style="margin-top:16px"
+                                    >
+                                        No demo orders yet.
+                                    </p>
+                                  `
+                        }
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+    `;
+}
+
+/* ---------- Frontend v2 event binding ---------- */
+
+function bindFrontendV2() {
+
+    /* Wishlist buttons */
+    document
+        .querySelectorAll("[data-wishlist]")
+        .forEach(button => {
+
+            button.addEventListener("click", event => {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                toggleWishlist(
+                    button.dataset.wishlist
+                );
+            });
+        });
+
+    /* Search button */
+    document
+        .querySelector("#searchButton")
+        ?.addEventListener("click", openSearch);
+
+    /* Cart icon opens drawer instead of immediately navigating */
+    const cartButtons =
+        document.querySelectorAll(
+            '.actions a[href="/cart"]'
+        );
+
+    cartButtons.forEach(button => {
+
+        button.addEventListener("click", event => {
+
+            event.preventDefault();
+            openCartDrawer();
+        });
+    });
+
+    /* Product gallery */
+    document
+        .querySelectorAll("[data-gallery-image]")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                const index =
+                    Number(button.dataset.galleryImage);
+
+                const product =
+                    getProduct(
+                        location.pathname.split("/")[2]
+                    );
+
+                if (!product) return;
+
+                const images =
+                    productImages(product);
+
+                const main =
+                    document.querySelector(
+                        "#mainProductImage"
+                    );
+
+                if (main) {
+                    main.src = images[index];
+                }
+
+                document
+                    .querySelectorAll(".gallery-thumb")
+                    .forEach(thumb =>
+                        thumb.classList.remove("active")
+                    );
+
+                button.classList.add("active");
+            });
+        });
+
+    /* Buy now */
+    document
+        .querySelector("#buyNowBtn")
+        ?.addEventListener("click", () => {
+
+            const product =
+                getProduct(
+                    location.pathname.split("/")[2]
+                );
+
+            if (!product) return;
+
+            const size =
+                document.querySelector(
+                    ".size.selected"
+                )?.dataset.size ||
+                product.sizes[0];
+
+            addCart(product.slug, size);
+
+            history.pushState(
+                {},
+                "",
+                "/checkout"
+            );
+
+            render();
+        });
+
+    /* Filter drawer */
+    document
+        .querySelector("#filterToggle")
+        ?.addEventListener("click", () => {
+
+            document
+                .querySelector("#filterDrawer")
+                ?.classList.toggle("open");
+        });
+
+    /* Shop filtering */
+    const shopRoot =
+        document.querySelector("#shopProducts");
+
+    if (shopRoot) {
+
+        let selectedCategory = "all";
+        let selectedStock = "all";
+        let selectedSort = "featured";
+
+        function refreshShop() {
+
+            const list =
+                filteredProducts(
+                    selectedCategory === "all"
+                        ? null
+                        : selectedCategory,
+                    "",
+                    selectedSort,
+                    selectedStock
+                );
+
+            shopRoot.innerHTML =
+                list.map(card).join("");
+
+            const count =
+                document.querySelector("#shopCount");
+
+            if (count) {
+                count.textContent =
+                    `${list.length} PRODUCTS`;
+            }
+
+            bindFrontendV2();
+            bindInternalLinks();
+        }
+
+        document
+            .querySelectorAll("[data-category-filter]")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    selectedCategory =
+                        button.dataset.categoryFilter;
+
+                    document
+                        .querySelectorAll(
+                            "[data-category-filter]"
+                        )
+                        .forEach(item =>
+                            item.classList.remove("active")
+                        );
+
+                    button.classList.add("active");
+
+                    refreshShop();
+                });
+            });
+
+        document
+            .querySelectorAll("[data-stock-filter]")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    selectedStock =
+                        button.dataset.stockFilter;
+
+                    document
+                        .querySelectorAll(
+                            "[data-stock-filter]"
+                        )
+                        .forEach(item =>
+                            item.classList.remove("active")
+                        );
+
+                    button.classList.add("active");
+
+                    refreshShop();
+                });
+            });
+
+        document
+            .querySelector("#sortProducts")
+            ?.addEventListener("change", event => {
+
+                selectedSort =
+                    event.target.value;
+
+                refreshShop();
+            });
+    }
+
+    /* Checkout form */
+    document
+        .querySelector("#checkoutForm")
+        ?.addEventListener("submit", event => {
+
+            event.preventDefault();
+
+            const order =
+                createDemoOrder();
+
+            if (!order) {
+                showToast(
+                    "Your cart is empty"
+                );
+
+                return;
+            }
+
+            cart = [];
+            persist();
+
+            history.pushState(
+                {},
+                "",
+                "/order/" + order.id
+            );
+
+            render();
+
+            showToast(
+                "Demo order placed successfully"
+            );
+        });
+
+    /* Account logout */
+    document
+        .querySelector("#accountLogout")
+        ?.addEventListener("click", logoutUser);
+}
+
+/* ---------- Patch the final render so V2 routes are included ---------- */
+
+const previousV2Render = render;
+
+render = function () {
+
+    const path =
+        location.pathname.replace(/\/$/, "") || "/";
+
+    let content = null;
+
+    if (path === "/wishlist") {
+        content = wishlistPage();
+    }
+    else if (path === "/checkout") {
+        content = checkoutPage();
+    }
+    else if (path === "/orders") {
+        content = ordersPage();
+    }
+    else if (path.startsWith("/order/")) {
+
+        const id =
+            path.split("/")[2];
+
+        const order =
+            demoOrders.find(
+                item => item.id === id
+            );
+
+        content =
+            order
+                ? orderDetailPage(order)
+                : notFound();
+    }
+
+    /*
+        Normal routes continue through the previous renderer.
+    */
+    if (content === null) {
+        previousV2Render();
+        return;
+    }
+
+    $("#app").innerHTML =
+        header() +
+        content +
+        footer();
+
+    updateBadge();
+    bind();
+    bindFrontendV2();
+    bindInternalLinks();
+
+    window.scrollTo(0, 0);
+};
+
+/* ---------- Final frontend initialization ---------- */
+
+setTimeout(() => {
+
+    bindFrontendV2();
+
+}, 50);
+
+
+/* =========================================================
    START THE WEBSITE
-   This must be the LAST thing in the script so all variables,
-   routes, authentication logic and render overrides already
-   exist before the first page is rendered.
+   This is intentionally the LAST executable initialization.
+   All V2 routes, wishlist, checkout, orders and handlers have
+   been declared before the first render occurs.
    ========================================================= */
 
 render();
+
 
     </script>
 
