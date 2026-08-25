@@ -565,7 +565,24 @@ function icon(type){
 function header(){
  return `<header class="site-header"><div class="sale-bar"><p class="eyebrow">FESTIVE SILVER SALE \\ UPTO 40% OFF</p><div class="countdown" id="countdown"></div></div>
  <div class="navbar"><a class="logo" href="/">AURVM</a><nav class="nav">${navLinks()}</nav>
- <div class="actions"><a class="icon-btn" href="/shop" aria-label="Search">${icon("search")}</a><a class="icon-btn" href="/contact" aria-label="Account">${icon("user")}</a><a class="icon-btn" href="/cart" aria-label="Cart">${icon("bag")}<span class="cart-badge">${cartCount()}</span></a><button class="icon-btn menu-btn" id="menuBtn">${icon(menuOpen?"x":"menu")}</button></div></div>
+ <div class="actions">
+    <button class="icon-btn" id="searchButton" aria-label="Search">
+        ${icon("search")}
+    </button>
+
+    <a class="icon-btn" href="${currentUser ? "/account" : "/login"}" aria-label="Account">
+        ${icon("user")}
+    </a>
+
+    <a class="icon-btn" href="/cart" aria-label="Cart">
+        ${icon("bag")}
+        <span class="cart-badge">${cartCount()}</span>
+    </a>
+
+    <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu">
+        ${icon(menuOpen ? "x" : "menu")}
+    </button>
+</div></div>
  <nav class="mobile-nav ${menuOpen?"open":""}">${navLinks()}</nav></header>`;
 }
 function navLinks(){return `<a href="/shop">NEW DROPS</a>${CATEGORIES.map(c=>`<a href="/shop/${c.slug}">${c.label.toUpperCase()}</a>`).join("")}<a href="/about">ABOUT</a><a href="/contact">CONTACT</a>`}

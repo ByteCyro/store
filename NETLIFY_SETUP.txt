@@ -1,0 +1,27 @@
+NETLIFY SETUP
+=============
+
+IMPORTANT:
+Upload/push ALL of these files, not only index.html:
+
+- index.html
+- _redirects
+- netlify.toml
+- assets/
+- favicon.ico
+
+Netlify must use the repository root as the publish directory.
+
+After pushing:
+1. Open Netlify -> Deploys.
+2. Wait for the newest deploy to finish.
+3. Hard refresh the website (Ctrl+Shift+R).
+4. Open /admin directly.
+
+Admin:
+Email: admin@aurvm.com
+Password: admin123
+
+Account icon:
+- Logged out -> /login
+- Logged in -> /account
