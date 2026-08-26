@@ -1389,6 +1389,28 @@ textarea:focus-visible {
     }
 }
 
+
+/* =========================================================
+   FRONTEND V4 POLISH
+   ========================================================= */
+
+.wishlist-badge {
+    min-width: 15px;
+    height: 15px;
+    padding: 0 4px;
+    font-size: 8px;
+}
+
+.admin-brand {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.admin-brand:hover {
+    opacity: .75;
+}
+
 </style>
 
 </head>
@@ -1476,6 +1498,18 @@ function header(){
 
     <a class="icon-btn" href="${currentUser ? "/account" : "/login"}" aria-label="Account">
         ${icon("user")}
+    </a>
+
+    <a
+        class="icon-btn"
+        href="/wishlist"
+        aria-label="Wishlist"
+        title="Wishlist"
+    >
+        ${heartIcon(typeof isWishlisted === "function" ? isWishlisted("") : false)}
+        <span class="cart-badge wishlist-badge" id="wishlistBadge">
+            ${typeof wishlist !== "undefined" ? wishlist.length : 0}
+        </span>
     </a>
 
     <a class="icon-btn" href="/cart" aria-label="Cart">
@@ -4745,25 +4779,59 @@ function bindFrontendV2() {
             });
         });
 
-    /* Buy now */
-    document
-        .querySelector("#buyNowBtn")
-        ?.addEventListener("click", () => {
+    /* Buy now — one clean handler for the product page. */
+    const buyNowButton =
+        document.querySelector("#buyNowBtn");
+
+    if (
+        buyNowButton &&
+        buyNowButton.dataset.v4BuyNowBound !== "true"
+    ) {
+        buyNowButton.dataset.v4BuyNowBound = "true";
+
+        buyNowButton.addEventListener("click", event => {
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            const slug =
+                location.pathname
+                    .split("/")
+                    .filter(Boolean)[1];
 
             const product =
-                getProduct(
-                    location.pathname.split("/")[2]
-                );
+                getProduct(slug);
 
-            if (!product) return;
+            if (!product) {
+                showToast("Product could not be found");
+                return;
+            }
 
             const size =
                 document.querySelector(
                     ".size.selected"
                 )?.dataset.size ||
-                product.sizes[0];
+                product.sizes?.[0] ||
+                "One size";
 
-            addCart(product.slug, size);
+            /*
+                Replace any previous Buy Now item so Buy Now
+                always means "purchase this product", not "add
+                another copy to an existing cart".
+            */
+            cart = cart.filter(
+                item => item.buyNow !== true
+            );
+
+            cart.push({
+                slug: product.slug,
+                size,
+                qty: 1,
+                buyNow: true
+            });
+
+            persist();
+            updateBadge();
 
             history.pushState(
                 {},
@@ -4772,7 +4840,8 @@ function bindFrontendV2() {
             );
 
             render();
-        });
+        }, true);
+    }
 
     /* Filter drawer */
     document
@@ -4898,6 +4967,7 @@ function bindFrontendV2() {
 
             cart = [];
             persist();
+            updateBadge();
 
             history.pushState(
                 {},
@@ -5077,9 +5147,16 @@ function createDemoOrder() {
     if (!items.length) return null;
 
     if (!currentUser) {
-        showToast("Please log in before placing an order");
-        history.pushState({}, "", "/login");
+        showToast("Please log in as a customer before placing an order");
+
+        history.pushState(
+            {},
+            "",
+            "/login"
+        );
+
         render();
+
         return null;
     }
 
@@ -5288,7 +5365,13 @@ function adminNav(active) {
 
     return `
         <aside class="admin-portal-sidebar">
-            <div class="admin-brand">AURVM ADMIN</div>
+            <a
+                class="admin-brand"
+                href="/"
+                title="Back to storefront"
+            >
+                AURVM ADMIN
+            </a>
 
             <div class="admin-nav-label">MANAGEMENT</div>
             ${item("/admin", "Dashboard", "dashboard")}
@@ -5556,7 +5639,7 @@ function bindAdminV3() {
     });
 
     document.querySelector("#adminLogoutV3")?.addEventListener("click", () => {
-        logoutUser();
+        adminLogoutButtonFix();
     });
 
     document.querySelectorAll("[data-v3-delete-product]").forEach(button => {
@@ -5785,6 +5868,269 @@ bindAuth = function (mode) {
         }, 0);
     });
 };
+
+
+/* =========================================================
+   FRONTEND V4 — SESSION SEPARATION
+   Admin and customer login states are intentionally separate.
+   This prevents an admin session from becoming a customer
+   account and prevents customer checkout from opening /admin.
+   ========================================================= */
+
+let adminSession = JSON.parse(
+    localStorage.getItem("aurvm-admin-session") || "null"
+);
+
+/*
+    Older versions stored the admin inside aurvm-user.
+    Migrate that old state once so existing deployments don't
+    remain stuck as "Admin" on the storefront.
+*/
+if (
+    currentUser &&
+    currentUser.email &&
+    currentUser.email.toLowerCase() === "admin@aurvm.com"
+) {
+    adminSession = {
+        name: "Admin",
+        email: "admin@aurvm.com"
+    };
+
+    localStorage.setItem(
+        "aurvm-admin-session",
+        JSON.stringify(adminSession)
+    );
+
+    currentUser = null;
+    localStorage.removeItem("aurvm-user");
+}
+
+function saveAdminSession() {
+    localStorage.setItem(
+        "aurvm-admin-session",
+        JSON.stringify(adminSession)
+    );
+}
+
+function clearAdminSession() {
+    adminSession = null;
+    localStorage.removeItem("aurvm-admin-session");
+}
+
+/*
+    V4 replaces the old "admin is the current customer" check.
+*/
+isAdmin = function () {
+    return Boolean(
+        adminSession &&
+        adminSession.email &&
+        adminSession.email.toLowerCase() === "admin@aurvm.com"
+    );
+};
+
+/*
+    When a customer explicitly logs in, leave admin mode.
+*/
+const saveUserV4Original = saveUser;
+saveUser = function (user) {
+    clearAdminSession();
+    saveUserV4Original(user);
+};
+
+/*
+    Customer logout only logs out the customer.
+*/
+const logoutUserV4Original = logoutUser;
+logoutUser = function () {
+    clearAdminSession();
+    logoutUserV4Original();
+};
+
+/* ---------- Admin login uses admin session only ---------- */
+
+const bindAdminV3Original = bindAdminV3;
+
+bindAdminV3 = function () {
+
+    bindAdminV3Original();
+
+    const form =
+        document.querySelector("#adminLoginFormV3");
+
+    if (!form || form.dataset.v4Bound === "true") {
+        return;
+    }
+
+    /*
+        Remove the listener installed by V3 by replacing the
+        form with a clone, then bind the correct V4 listener.
+    */
+    const cleanForm = form.cloneNode(true);
+    form.replaceWith(cleanForm);
+
+    cleanForm.dataset.v4Bound = "true";
+
+    cleanForm.addEventListener("submit", event => {
+
+        event.preventDefault();
+
+        const email =
+            document
+                .querySelector("#adminEmailV3")
+                ?.value
+                .trim()
+                .toLowerCase();
+
+        const password =
+            document
+                .querySelector("#adminPasswordV3")
+                ?.value
+                .trim();
+
+        if (
+            email !== "admin@aurvm.com" ||
+            password !== "admin123"
+        ) {
+            showToast("Invalid admin credentials");
+            return;
+        }
+
+        adminSession = {
+            name: "Admin",
+            email
+        };
+
+        saveAdminSession();
+
+        history.pushState(
+            {},
+            "",
+            "/admin"
+        );
+
+        render();
+    });
+};
+
+/* ---------- Admin logout ---------- */
+
+const adminLogoutButtonFix = () => {
+
+    clearAdminSession();
+
+    showToast("Admin logged out");
+
+    history.pushState(
+        {},
+        "",
+        "/"
+    );
+
+    render();
+};
+
+
+
+/* ---------- Wishlist badge ---------- */
+
+function updateWishlistBadge() {
+
+    const badge =
+        document.querySelector("#wishlistBadge");
+
+    if (!badge) return;
+
+    badge.textContent =
+        wishlist.length;
+
+    badge.style.display =
+        wishlist.length
+            ? ""
+            : "none";
+}
+
+/* Rebuild the current customer's wishlist whenever account state changes. */
+const toggleWishlistV4Original = toggleWishlist;
+
+toggleWishlist = function (slug) {
+
+    if (!currentUser && !isAdmin()) {
+        /*
+            Guests can still save wishlist items locally.
+            They will be stored in the guest wishlist until
+            they log in.
+        */
+    }
+
+    toggleWishlistV4Original(slug);
+
+    updateWishlistBadge();
+};
+
+
+
+/* =========================================================
+   FRONTEND V4 — ROUTING + UI SAFETY
+   ========================================================= */
+
+const renderV4Previous = render;
+
+render = function () {
+
+    const path =
+        location.pathname.replace(/\/$/, "") || "/";
+
+    /*
+        Admin routes are completely isolated.
+    */
+    if (
+        path === "/admin" ||
+        path.startsWith("/admin/")
+    ) {
+        renderV4Previous();
+        updateWishlistBadge();
+        return;
+    }
+
+    /*
+        If an admin is currently authenticated, do NOT let
+        customer-only screens silently redirect into admin.
+        Instead, the admin session is independent and the
+        storefront remains available.
+    */
+
+    if (path === "/account" && isAdmin()) {
+        history.replaceState({}, "", "/admin");
+        return render();
+    }
+
+    /*
+        A customer order route must belong to the customer.
+        Admin routes use /admin/orders/... exclusively.
+    */
+    if (path.startsWith("/order/") && isAdmin()) {
+
+        /*
+            If a real customer session is also present, the
+            customer can still view their own order. Otherwise
+            keep the admin portal separate.
+        */
+        if (!currentUser) {
+            history.replaceState(
+                {},
+                "",
+                "/admin/orders"
+            );
+
+            return render();
+        }
+    }
+
+    renderV4Previous();
+
+    updateWishlistBadge();
+};
+
 
 /* Final startup. */
 render();

@@ -1,0 +1,38 @@
+AURVM FRONTEND V4
+
+This version fixes:
+- Separate customer/admin sessions
+- Admin login no longer becomes the customer
+- Customer checkout no longer redirects to admin
+- Admin logo returns to storefront
+- Wishlist icon added to storefront navbar
+- Buy Now uses a dedicated one-item checkout flow
+- Admin/customer order routes stay separate
+- Existing Netlify SPA routing retained
+
+Deploy all files:
+index.html
+_redirects
+netlify.toml
+assets/
+favicon.ico
+
+Then:
+git add .
+git commit -m "Fix sessions wishlist buy now and admin routing"
+git push
+
+Hard refresh after deployment:
+Ctrl + Shift + R
+
+Admin:
+admin@aurvm.com
+admin123
+
+Store:
+/
+Customer orders:
+/orders
+
+Admin orders:
+/admin/orders
